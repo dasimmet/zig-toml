@@ -1,6 +1,6 @@
-const Builder = @import("std").build.Builder;
+const Build = @import("std").Build;
 
-pub fn build(b: *Builder) void {
+pub fn build(b: *Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
     const lib = b.addStaticLibrary(.{
@@ -10,6 +10,11 @@ pub fn build(b: *Builder) void {
         .target = target,
     });
     b.installArtifact(lib);
+    _ = b.addModule("toml", .{
+        .root_source_file = .{ .path = "src/toml.zig" },
+        .optimize = optimize,
+        .target = target,
+    });
 
     const main_tests = b.addTest(.{
         .root_source_file = .{ .path = "src/toml.zig" },
